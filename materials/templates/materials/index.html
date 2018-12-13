@@ -1,0 +1,96 @@
+{% extends "home/base.html" %}
+
+{% block title %}Raw Materials - PFS Manager{% endblock %}
+
+{% block navbar %}
+{% include 'home/navbar.html' with navbar_tab='materials' %}
+{% endblock %}
+
+{% block content %}
+{% include 'materials/menu.html' with menu_tab='latest' %}
+
+<div class="card mb-4">
+    <div class="card-header">
+        Latest Raw materials
+    </div>
+    <table id="table-accordion" class="table table-hover table-bordered accordion mb-0">
+        <thead>
+            <tr>
+                <th class="table-col-no">#</th>
+                <th class="table-col-code d-none d-md-table-cell">Code</th>
+                <th>Name</th>
+                <th class="table-col-quantity d-none d-md-table-cell">Quantity</th>
+                <th class="table-col-date d-none d-md-table-cell">Date Purchased</th>
+                <th class="table-col-action">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+{% for material in materials %}
+            <tr data-toggle="collapse" data-target="#material-{{material.id}}">
+                <td>{{forloop.counter}}</td>
+                <td class="d-none d-md-table-cell">{{ material.code }}</td>
+                <td>
+                    <div class="d-md-none small">
+                        [{{ material.code }}]
+                    </div>
+                    <p>{{material.name}}</p>
+                    <div id="material-{{material.id}}" class="collapse  small" data-parent="#table-accordion">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-3">Description</dt>
+                            <dd class="col-sm-9">{{ material.description }}</dd>
+                        </dl>
+                        <dl class="d-md-none row mb-0">
+                            <dt class="col-sm-3">Quantity</dt>
+                            <dd class="col-sm-9">{{ material.quantity }}</dd>
+                        </dl>
+                        <dl class="d-md-none row mb-0">
+                            <dt class="col-sm-3">Date Purchased</dt>
+                            <dd class="col-sm-9">{{ material.date_purchased }}</dd>
+                        </dl>
+                        <dl class="row mb-0">
+                            <dt class="col-sm-3">Added by</dt>
+                            <dd class="col-sm-9">{{ material.user }}</dd>
+                        </dl>
+                    </div>
+                </td>
+                <td class="d-none d-md-table-cell">{{ material.quantity }}</td>
+                <td class="d-none d-md-table-cell">{{ material.date_purchased }}</td>
+                <td>
+                    <a class="text-info" href="{% url 'materials:edit' material.id %}">Edit</a>
+                    &nbsp;
+                    <a class="text-danger" href="javascript:prompt_delete({{material.id}})">Delete</a>
+                </td>
+            </tr>
+{% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block modals %}
+    <div id="modal-material-delete" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{% url 'materials:delete' %}" method="post">
+                    {% csrf_token %}
+                    <input id="modal-material-delete-id" type="hidden" name="material_id" value="0">
+                    <div class="modal-body">
+                        Are you sure you want to delete this record?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-success" name="delete" value="1">Yes</button>
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">No</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    function prompt_delete(id)
+    {
+        $('#modal-material-delete-id').val(id);
+        $('#modal-material-delete').modal('show');
+    }
+{% endblock %}

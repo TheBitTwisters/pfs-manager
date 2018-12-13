@@ -1,0 +1,73 @@
+{% extends "home/base.html" %}
+
+{% block title %}Product Categories - PFS Manager{% endblock %}
+
+{% block navbar %}
+{% include 'home/navbar.html' with navbar_tab='products' %}
+{% endblock %}
+
+{% block content %}
+{% include 'products/menu.html' with menu_tab='categories' %}
+
+<div class="card mb-4">
+    <div class="card-header">
+        Product Categories
+    </div>
+    <table id="table-accordion" class="table table-hover table-bordered accordion mb-0">
+        <thead>
+            <tr>
+                <th class="table-col-no">#</th>
+                <th>Name</th>
+                <th class="table-col-action">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+{% for category in categories %}
+            <tr data-toggle="collapse" data-target="#category-{{category.id}}">
+                <td>{{ forloop.counter }}</td>
+                <td>
+                    {{ category.name }}
+                    <div id="category-{{category.id}}" class="collapse small" data-parent="#table-accordion">
+                        <hr>
+                        <p>Added by {{ category.user }}</p>
+                    </div>
+                </td>
+                <td>
+                    <a class="text-info" href="{% url 'products:category_edit' category.id %}">Edit</a>
+                    &nbsp;
+                    <a class="text-danger" href="javascript:prompt_delete({{category.id}})">Delete</a>
+                </td>
+            </tr>
+{% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block modals %}
+    <div id="modal-category-delete" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="{% url 'products:category_delete' %}" method="post">
+                    {% csrf_token %}
+                    <input id="modal-category-delete-id" type="hidden" name="category_id" value="0">
+                    <div class="modal-body">
+                        Are you sure you want to delete this record?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-success">Yes</button>
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">No</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    function prompt_delete(id)
+    {
+        $('#modal-category-delete-id').val(id);
+        $('#modal-category-delete').modal('show');
+    }
+{% endblock %}

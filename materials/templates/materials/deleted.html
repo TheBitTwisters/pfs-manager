@@ -1,0 +1,51 @@
+{% extends "home/base.html" %}
+
+{% block title %}Deleted Raw Materials - PFS Manager{% endblock %}
+
+{% block navbar %}
+{% include 'home/navbar.html' with navbar_tab='materials' %}
+{% endblock %}
+
+{% block content %}
+{% include 'materials/menu.html' with menu_tab='deleted' %}
+
+<div class="card mb-4">
+    <div class="card-header">
+        Deleted Raw materials
+    </div>
+    <table id="table-accordion" class="table table-hover table-bordered accordion mb-0">
+        <thead>
+            <tr>
+                <th class="table-col-no">#</th>
+                <th class="table-col-code d-none d-md-table-cell">Code</th>
+                <th>Name</th>
+                <th class="table-col-quantity d-none d-md-table-cell">Quantity</th>
+                <th class="table-col-date d-none d-md-table-cell">Date Purchased</th>
+            </tr>
+        </thead>
+        <tbody>
+{% for material in materials %}
+            <tr data-toggle="collapse" data-target="#material-{{material.id}}">
+                <td>{{forloop.counter}}</td>
+                <td class="d-none d-md-table-cell">{{ material.code }}</td>
+                <td>
+                    <div class="d-md-none small">
+                        [{{ material.code }}]
+                    </div>
+                    {{material.name}}
+                    <div id="material-{{material.id}}" class="collapse small" data-parent="#table-accordion">
+                        <hr>
+                        <p class="mb-0">Description: {{ material.description }}</p>
+                        <p class="d-md-none mb-0">Quantity: {{ material.quantity }}</p>
+                        <p class="d-md-none mb-0">Date Purchased: {{ material.date_purchased }}</p>
+                        <p class="mb-0">Added by {{ material.user }}</p>
+                    </div>
+                </td>
+                <td class="d-none d-md-table-cell">{{ material.quantity }}</td>
+                <td class="d-none d-md-table-cell">{{ material.date_purchased }}</td>
+            </tr>
+{% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

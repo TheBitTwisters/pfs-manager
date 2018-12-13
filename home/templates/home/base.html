@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}PFS Manager{% endblock %}</title>
+
+        {% load static %}
+        <link rel="stylesheet" type="text/css" href="{% static 'plugins/bootstrap/css/bootstrap.min.css' %}">
+
+        <style media="screen">
+            .table-col-no
+            {
+                width: 2rem;
+            }
+            .table-col-code
+            {
+                width: 5rem;
+            }
+            .table-col-quantity
+            {
+                width: 5rem;
+            }
+            .table-col-date
+            {
+                width: 10rem;
+            }
+            .table-col-action
+            {
+                width: 12rem;
+            }
+
+            {% block style %}{% endblock %}
+        </style>
+    </head>
+    <body>
+
+        {% block navbar %}{% endblock %}
+
+        <div class="container my-3">
+            {% block content %}{% endblock %}
+        </div>
+
+        {% block modals %}{% endblock %}
+
+        <script src="{% static 'plugins/jquery/jquery-3.3.1.min.js' %}"></script>
+        <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script type="text/javascript">
+            {% block scripts %}{% endblock %}
+        </script>
+    </body>
+</html>

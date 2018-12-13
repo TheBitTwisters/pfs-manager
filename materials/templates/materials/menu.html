@@ -1,0 +1,9 @@
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link {% if menu_tab == 'latest' %}active{% endif %}"
+            href="{% url 'materials:index' %}">Latest</a>
+    </li>
+    <li class="ml-auto nav-item">
+        <a class="nav-link" href="{% url 'materials:edit' 0 %}">Add new raw material</a>
+    </li>
+</ul>

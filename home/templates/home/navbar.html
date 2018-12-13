@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'home:index' %}">PFS Manager</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-content">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if navbar_tab == 'shop' %}active{% endif %}" href="{% url 'shop:index' %}">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if navbar_tab == 'products' %}active{% endif %}" href="{% url 'products:index' %}">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if navbar_tab == 'materials' %}active{% endif %}" href="{% url 'materials:index' %}">Raw Materials</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link" href="javascript:void(0)" data-toggle="dropdown">
+                        Account
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'admin:logout' %}">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
