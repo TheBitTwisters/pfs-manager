@@ -10,7 +10,7 @@ import datetime
 def index(request):
     materials = Material.objects.filter(deleted=False).order_by('-id')[:30]
     data = { 'materials': materials }
-    return render(request, 'materials/index.html', data)
+    return render(request, 'materials/latest.html', data)
 
 
 @login_required
@@ -57,6 +57,7 @@ def delete(request):
         try:
             material = Material.objects.get(id=material_id)
             material.deleted = True
+            material.datetime_deleted = datetime.now
             material.save()
         except ObjectDoesNotExist:
             material = None

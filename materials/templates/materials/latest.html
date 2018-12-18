@@ -17,7 +17,6 @@
         <thead>
             <tr>
                 <th class="table-col-no">#</th>
-                <th class="table-col-code d-none d-md-table-cell">Code</th>
                 <th>Name</th>
                 <th class="table-col-quantity d-none d-md-table-cell">Quantity</th>
                 <th class="table-col-date d-none d-md-table-cell">Date Purchased</th>
@@ -28,27 +27,23 @@
 {% for material in materials %}
             <tr data-toggle="collapse" data-target="#material-{{material.id}}">
                 <td>{{forloop.counter}}</td>
-                <td class="d-none d-md-table-cell">{{ material.code }}</td>
                 <td>
-                    <div class="d-md-none small">
-                        [{{ material.code }}]
-                    </div>
                     <p>{{ material.name }}</p>
                     <div id="material-{{material.id}}" class="collapse  small" data-parent="#table-accordion">
                         <dl class="row mb-0">
-                            <dt class="col-sm-3">Description</dt>
+                            <dt class="col-sm-3 col-lg-2">Description</dt>
                             <dd class="col-sm-9">{{ material.description }}</dd>
                         </dl>
                         <dl class="d-md-none row mb-0">
-                            <dt class="col-sm-3">Quantity</dt>
+                            <dt class="col-sm-3 col-lg-2">Quantity</dt>
                             <dd class="col-sm-9">{{ material.quantity }}</dd>
                         </dl>
                         <dl class="d-md-none row mb-0">
-                            <dt class="col-sm-3">Date Purchased</dt>
+                            <dt class="col-sm-3 col-lg-2">Date Purchased</dt>
                             <dd class="col-sm-9">{{ material.date_purchased }}</dd>
                         </dl>
                         <dl class="row mb-0">
-                            <dt class="col-sm-3">Added by</dt>
+                            <dt class="col-sm-3 col-lg-2">Added by</dt>
                             <dd class="col-sm-9">{{ material.user }}</dd>
                         </dl>
                     </div>

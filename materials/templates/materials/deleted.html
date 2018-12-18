@@ -17,7 +17,6 @@
         <thead>
             <tr>
                 <th class="table-col-no">#</th>
-                <th class="table-col-code d-none d-md-table-cell">Code</th>
                 <th>Name</th>
                 <th class="table-col-quantity d-none d-md-table-cell">Quantity</th>
                 <th class="table-col-date d-none d-md-table-cell">Date Purchased</th>
@@ -27,11 +26,7 @@
 {% for material in materials %}
             <tr data-toggle="collapse" data-target="#material-{{material.id}}">
                 <td>{{forloop.counter}}</td>
-                <td class="d-none d-md-table-cell">{{ material.code }}</td>
                 <td>
-                    <div class="d-md-none small">
-                        [{{ material.code }}]
-                    </div>
                     {{material.name}}
                     <div id="material-{{material.id}}" class="collapse small" data-parent="#table-accordion">
                         <hr>
