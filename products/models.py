@@ -4,7 +4,7 @@ import datetime
 
 
 class Coffin(models.Model):
-    code = models.CharField(max_length=15, blank=False)
+    code = models.CharField(max_length=15, blank=False, unique=True)
     name = models.CharField(max_length=50, blank=False)
     description = models.TextField(blank=True)
     colors = models.CharField(max_length=255, blank=False)
