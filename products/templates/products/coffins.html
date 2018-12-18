@@ -1,17 +1,17 @@
 {% extends "home/base.html" %}
 
-{% block title %}Products - PFS Manager{% endblock %}
+{% block title %}Coffins - PFS Manager{% endblock %}
 
 {% block navbar %}
 {% include 'home/navbar.html' with navbar_tab='products' %}
 {% endblock %}
 
 {% block content %}
-{% include 'products/menu.html' with menu_tab='products' %}
+{% include 'products/menu.html' with menu_tab='coffins' %}
 
 <div class="card mb-4">
     <div class="card-header">
-        Products
+        Coffins
     </div>
     <table id="table-accordion" class="table table-hover table-bordered accordion mb-0">
         <thead>
@@ -22,20 +22,20 @@
             </tr>
         </thead>
         <tbody>
-{% for product in products %}
-            <tr data-toggle="collapse" data-target="#product-{{product.id}}">
+{% for coffin in coffins %}
+            <tr data-toggle="collapse" data-target="#coffin-{{coffin.id}}">
                 <td>{{ forloop.counter }}</td>
                 <td>
-                    {{ product.name }}
-                    <div id="product-{{product.id}}" class="collapse small" data-parent="#table-accordion">
+                    {{ coffin.name }}
+                    <div id="coffin-{{coffin.id}}" class="collapse small" data-parent="#table-accordion">
                         <hr>
-                        <p>Added by {{ product.user }}</p>
+                        <p>Added by {{ coffin.user }}</p>
                     </div>
                 </td>
                 <td>
-                    <a class="text-info" href="{% url 'products:product_edit' product.id %}">Edit</a>
+                    <a class="text-info" href="{% url 'products:coffin_edit' coffin.id %}">Edit</a>
                     &nbsp;
-                    <a class="text-danger" href="javascript:prompt_delete({{product.id}})">Delete</a>
+                    <a class="text-danger" href="javascript:prompt_delete({{coffin.id}})">Delete</a>
                 </td>
             </tr>
 {% endfor %}
@@ -45,12 +45,12 @@
 {% endblock %}
 
 {% block modals %}
-    <div id="modal-product-delete" class="modal" tabindex="-1" role="dialog">
+    <div id="modal-coffin-delete" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="{% url 'products:product_delete' %}" method="post">
+                <form action="{% url 'products:coffin_delete' %}" method="post">
                     {% csrf_token %}
-                    <input id="modal-product-delete-id" type="hidden" name="product_id" value="0">
+                    <input id="modal-coffin-delete-id" type="hidden" name="coffin_id" value="0">
                     <div class="modal-body">
                         Are you sure you want to delete this record?
                     </div>
@@ -67,7 +67,7 @@
 {% block scripts %}
     function prompt_delete(id)
     {
-        $('#modal-product-delete-id').val(id);
-        $('#modal-product-delete').modal('show');
+        $('#modal-coffin-delete-id').val(id);
+        $('#modal-coffin-delete').modal('show');
     }
 {% endblock %}
