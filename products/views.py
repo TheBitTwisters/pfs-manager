@@ -29,7 +29,7 @@ def coffin_save(request):
     coffin_id = request.POST.get('coffin_id', 0)
     next = request.POST.get('next', 'list')
     if request.method == 'POST':
-        coffin = Product()
+        coffin = Coffin()
         if int(coffin_id) > 0:
             coffin.id = coffin_id
         coffin.form(request.POST)
@@ -60,3 +60,46 @@ def services(request):
     services = Service.objects.filter(deleted=False).order_by('-id')[:30]
     data = { 'services': services }
     return render(request, 'products/services.html', data)
+
+
+@login_required
+def service_edit(request,service_id=0):
+    service = None
+    try:
+        service = Service.objects.get(id=service_id)
+    except ObjectDoesNotExist:
+        service = Service()
+        service.id = 0
+    data = { 'service': service }
+    return render(request, 'products/service_edit.html', data)
+
+
+@login_required
+def service_save(request):
+    service_id = request.POST.get('service_id', 0)
+    next = request.POST.get('next', 'list')
+    if request.method == 'POST':
+        service = Service()
+        if int(service_id) > 0:
+            service.id = service_id
+        service.form(request.POST)
+        service.user = request.user
+        if service.is_valid():
+            service.save()
+            if next == 'add':
+                return redirect('products:service_edit', 0)
+            return redirect('products:services')
+    return redirect('products:service_edit', service_id)
+
+
+@login_required
+def service_delete(request):
+    service_id = request.POST.get('service_id', 0)
+    if request.method == 'POST':
+        try:
+            service = Service.objects.get(id=service_id)
+            service.deleted = True
+            service.save()
+        except ObjectDoesNotExist:
+            service = None
+    return redirect('products:services')

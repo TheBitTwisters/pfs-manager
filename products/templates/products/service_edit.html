@@ -1,0 +1,74 @@
+{% extends "home/base.html" %}
+
+{% block title %}Edit Product - PFS Manager{% endblock %}
+
+{% block navbar %}
+{% include 'home/navbar.html' with navbar_tab='products' %}
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'products:coffins' %}" class="btn btn-link mb-4">Back to Coffins list</a>
+<div class="card mb-4">
+    <div class="card-header">
+        Coffin Info
+    </div>
+    <div class="card-body">
+        <form class="" action="{% url 'products:coffin_save' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="coffin_id" value="{{ coffin.id }}">
+            <fieldset class="mb-4">
+                <div class="form-group row">
+                    <label for="form-coffin-code" class="col-md-2 col-form-label">Code</label>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="form-coffin-code" name="code"
+                            placeholder="Enter code" maxlength="15" value="{{ coffin.code }}" required>
+                        <small id="form-coffin-code-help" class="form-text text-muted">Code of the coffin</small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-coffin-name" class="col-md-2 col-form-label">Name</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="form-coffin-name" name="name"
+                            placeholder="Enter name" maxlength="255" value="{{ coffin.name }}" required>
+                        <small id="form-coffin-name-help" class="form-text text-muted">Name of the coffin</small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-coffin-description" class="col-md-2 col-form-label">Description</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" id="form-coffin-description" name="description"
+                            rows="3" placeholder="Enter description">{{ coffin.description }}</textarea>
+                        <small id="form-coffin-description-help" class="form-text text-muted">Description of the coffin</small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-coffin-colors" class="col-md-2 col-form-label">Colors</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="form-coffin-colors" name="colors"
+                            placeholder="Enter colors" maxlength="255" value="{{ coffin.colors }}" required>
+                        <small id="form-coffin-colors-help" class="form-text text-muted">Colors of the coffin</small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-coffin-price" class="col-md-2 col-form-label">Price</label>
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" id="form-coffin-price" name="price"
+                            placeholder="Enter price" min="0" value="{{ coffin.price }}" required>
+                        <small id="form-coffin-price-help" class="form-text text-muted">Price of the coffin</small>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="form-group mb-0 row">
+                    <div class="offset-md-2 col-md-3">
+                        <button type="submit" class="btn btn-success"
+                            name="next" value="list">Save</button>
+                        <button type="submit" class="btn btn-success"
+                            name="next" value="add">Save &amp; add another</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock %}
