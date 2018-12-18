@@ -27,7 +27,7 @@
 {% for coffin in coffins %}
             <tr data-toggle="collapse" data-target="#coffin-{{coffin.id}}">
                 <td>{{ forloop.counter }}</td>
-                <td class="d-none d-md-table-cell">{{ material.code }}</td>
+                <td class="d-none d-md-table-cell">{{ coffin.code }}</td>
                 <td>
                     <div class="d-md-none small">
                         [{{ coffin.code }}]
