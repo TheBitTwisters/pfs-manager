@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 from .models import Material
-import datetime
+from logs.models import Log
 
 
 @login_required
@@ -36,14 +37,23 @@ def edit(request, material_id=0):
 def save(request):
     material_id = request.POST.get('material_id', 0)
     next = request.POST.get('next', 'list')
+    action = 'create'
     if request.method == 'POST':
         material = Material()
         if int(material_id) > 0:
             material.id = material_id
+            action = 'update'
+            material.datetime_updated = timezone.now()
         material.form(request.POST)
         material.user = request.user
         if material.is_valid():
             material.save()
+            Log.objects.create(
+                object = 'Material',
+                object_id = material.id,
+                action = action,
+                user = request.user
+            )
             if next == 'add':
                 return redirect('materials:edit', 0)
             return redirect('materials:index')
@@ -57,8 +67,14 @@ def delete(request):
         try:
             material = Material.objects.get(id=material_id)
             material.deleted = True
-            material.datetime_deleted = datetime.now
+            material.datetime_deleted = timezone.now()
             material.save()
+            Log.objects.create(
+                object = 'Material',
+                object_id = material.id,
+                action = 'delete',
+                user = request.user
+            )
         except ObjectDoesNotExist:
             material = None
     return redirect('materials:index')
