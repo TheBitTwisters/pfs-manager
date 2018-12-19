@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'materials',
     'products',
     'shop',
+    'logs',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
