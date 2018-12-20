@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.text import Truncator
 
 
 class Material(models.Model):
@@ -24,3 +25,6 @@ class Material(models.Model):
         if not self.name:
             return False
         return True
+
+    def short_description(self, word_count=15):
+        return Truncator(self.description).words(word_count)
