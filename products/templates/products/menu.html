@@ -9,7 +9,7 @@
 {% if menu_tab == 'coffins' %}
         <a class="nav-link" href="{% url 'products:coffin_edit' 0 %}">Add new coffin</a>
 {% else %}
-        <a class="nav-link" href="{% url 'products:coffin_edit' 0 %}">Add new service</a>
+        <a class="nav-link" href="{% url 'products:service_edit' 0 %}">Add new service</a>
 {% endif %}
     </li>
 </ul>
