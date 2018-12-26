@@ -36,6 +36,9 @@ class Coffin(models.Model):
     def short_description(self, word_count=15):
         return Truncator(self.description).words(word_count)
 
+    def print_price(self):
+        return "{0:,.2f}".format(self.price)
+
 
 class Service(models.Model):
     code = models.CharField(max_length=15, blank=False)
@@ -64,3 +67,6 @@ class Service(models.Model):
 
     def short_description(self, word_count=15):
         return Truncator(self.description).words(word_count)
+
+    def print_price(self):
+        return "{0:,.2f}".format(self.price)
