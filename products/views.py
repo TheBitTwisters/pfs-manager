@@ -33,10 +33,13 @@ def coffin_save(request):
     action = 'create'
     if request.method == 'POST':
         coffin = Coffin()
-        if int(coffin_id) > 0:
-            coffin.id = coffin_id
-            action = 'update'
-            coffin.datetime_updated = timezone.now()
+        try:
+            if int(coffin_id) > 0:
+                coffin.id = coffin_id
+                action = 'update'
+                coffin.datetime_updated = timezone.now()
+        except ValueError as e:
+            coffin.id = 0
         coffin.form(request.POST)
         coffin.user = request.user
         if coffin.is_valid():
@@ -99,10 +102,13 @@ def service_save(request):
     action = 'create'
     if request.method == 'POST':
         service = Service()
-        if int(service_id) > 0:
-            service.id = service_id
-            action = 'update'
-            service.datetime_updated = timezone.now()
+        try:
+            if int(service_id) > 0:
+                service.id = service_id
+                action = 'update'
+                service.datetime_updated = timezone.now()
+        except ValueError as e:
+            service.id = 0
         service.form(request.POST)
         service.user = request.user
         if service.is_valid():
