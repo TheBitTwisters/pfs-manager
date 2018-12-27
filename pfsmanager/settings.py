@@ -25,7 +25,7 @@ SECRET_KEY = '$*jjvi2^*c5a0v5&fp2fj0w+tp&^nq#ts9%h@(8!lpap5-^3ki'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['104.248.158.54', 'manager.paradisefuneralservices.net']
+ALLOWED_HOSTS = ['manager.paradisefuneralservices.net']
 
 
 # Application definition
