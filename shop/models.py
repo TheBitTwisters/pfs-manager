@@ -29,7 +29,7 @@ class Quote(models.Model):
     datetime_deleted = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return '[' + self.code + '] ' + self.name
+        return '[' + self.number + '] ' + self.deceased_name
 
     def form(self, form):
         self.number = form.get('number', '0')
@@ -50,14 +50,8 @@ class Quote(models.Model):
         self.pickup_notes = form.get('pickup_notes', '')
 
     def is_valid(self):
-        if not self.name:
+        if not self.number:
             return False
-        if not self.colors:
+        if not self.person_name:
             return False
         return True
-
-    def short_description(self, word_count=15):
-        return Truncator(self.description).words(word_count)
-
-    def print_price(self):
-        return "{0:,.2f}".format(self.price)
