@@ -6,5 +6,5 @@ import datetime
 
 
 @login_required
-def index(request):
-    return render(request, 'shop/index.html')
+def quotes(request):
+    return render(request, 'shop/quotes.html')

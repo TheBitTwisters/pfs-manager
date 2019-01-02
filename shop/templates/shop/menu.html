@@ -1,0 +1,10 @@
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a class="nav-link {% if menu_tab == 'quotes' %}active{% endif %}" href="{% url 'shop:quotes' %}">Quotations</a>
+    </li>
+    <li class="ml-auto nav-item">
+{% if menu_tab == 'quotes' %}
+        <a class="nav-link" href="{% url 'shop:quote_edit' 0 %}">Add new quotations</a>
+{% endif %}
+    </li>
+</ul>
