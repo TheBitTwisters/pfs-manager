@@ -17,7 +17,7 @@
         <thead>
             <tr>
                 <th class="table-col-no">#</th>
-                <th class="table-col-code d-none d-md-table-cell">Quote No.</th>
+                <th class="table-col-code d-none d-md-table-cell">Quote #</th>
                 <th>Deceased Name</th>
                 <th class="table-col-date d-none d-md-table-cell">Date</th>
                 <th class="table-col-action">Action</th>
@@ -25,38 +25,30 @@
         </thead>
         <tbody>
 {% for quote in quotes %}
-            <tr data-toggle="collapse" data-target="#coffin-{{coffin.id}}">
+            <tr data-toggle="collapse" data-target="#quote-{{quote.id}}">
                 <td>{{ forloop.counter }}</td>
-                <td class="d-none d-md-table-cell">{{ coffin.code }}</td>
+                <td class="d-none d-md-table-cell">{{ quote.number }}</td>
                 <td>
                     <div class="d-md-none small">
-                        [{{ coffin.code }}]
+                        [{{ quote.number }}]
                     </div>
-                    <p>{{ coffin.name }}</p>
-                    <div id="coffin-{{coffin.id}}" class="collapse small" data-parent="#table-accordion">
-                        <dl class="row mb-0">
-                            <dt class="col-sm-3 col-lg-2">Description</dt>
-                            <dd class="col-sm-9">{{ coffin.short_description }}</dd>
-                        </dl>
-                        <dl class="row mb-0">
-                            <dt class="col-sm-3 col-lg-2">Colors</dt>
-                            <dd class="col-sm-9">{{ coffin.colors }}</dd>
-                        </dl>
+                    <p>{{ quote.deceased_name }}</p>
+                    <div id="quote-{{quote.id}}" class="collapse small" data-parent="#table-accordion">
                         <dl class="d-md-none row mb-0">
-                            <dt class="col-sm-3 col-lg-2">Price</dt>
-                            <dd class="col-sm-9">PGK {{ coffin.print_price }}</dd>
+                            <dt class="col-sm-3 col-lg-2">Date</dt>
+                            <dd class="col-sm-9">{{ quote.date }}</dd>
                         </dl>
                         <dl class="row mb-0">
                             <dt class="col-sm-3 col-lg-2">Added by</dt>
-                            <dd class="col-sm-9">{{ coffin.user }}</dd>
+                            <dd class="col-sm-9">{{ quote.user }}</dd>
                         </dl>
                     </div>
                 </td>
-                <td class="d-none d-md-table-cell text-right">PGK {{ coffin.print_price }}</td>
+                <td class="d-none d-md-table-cell">{{ quote.date }}</td>
                 <td>
-                    <a class="text-info" href="{% url 'products:coffin_edit' coffin.id %}">Edit</a>
+                    <a class="text-info" href="{% url 'shop:quote_edit' quote.id %}">Edit</a>
                     &nbsp;
-                    <a class="text-danger" href="javascript:prompt_delete({{coffin.id}})">Delete</a>
+                    <a class="text-danger" href="javascript:prompt_delete({{ quote.id }})">Delete</a>
                 </td>
             </tr>
 {% endfor %}
@@ -66,12 +58,12 @@
 {% endblock %}
 
 {% block modals %}
-    <div id="modal-coffin-delete" class="modal" tabindex="-1" role="dialog">
+    <div id="modal-quote-delete" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="{% url 'products:coffin_delete' %}" method="post">
+                <form action="{% url 'shop:quote_delete' %}" method="post">
                     {% csrf_token %}
-                    <input id="modal-coffin-delete-id" type="hidden" name="coffin_id" value="0">
+                    <input id="modal-quote-delete-id" type="hidden" name="quote_id" value="0">
                     <div class="modal-body">
                         Are you sure you want to delete this record?
                     </div>
@@ -88,7 +80,7 @@
 {% block scripts %}
     function prompt_delete(id)
     {
-        $('#modal-coffin-delete-id').val(id);
-        $('#modal-coffin-delete').modal('show');
+        $('#modal-quote-delete-id').val(id);
+        $('#modal-quote-delete').modal('show');
     }
 {% endblock %}

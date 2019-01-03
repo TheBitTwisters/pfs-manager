@@ -1,0 +1,47 @@
+{% extends "home/base.html" %}
+
+{% block title %}Edit Quotation - PFS Manager{% endblock %}
+
+{% block navbar %}
+{% include 'home/navbar.html' with navbar_tab='shop' %}
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'shop:quotes' %}" class="btn btn-link mb-4">Back to Quotations list</a>
+<div class="card mb-4">
+    <div class="card-header">
+        Quotation Info
+    </div>
+    <div class="card-body">
+        <form class="" action="{% url 'shop:quote_save' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="quote_id" value="{{ quote.id }}">
+            <fieldset class="mb-4">
+                <div class="form-group row">
+                    <label for="form-quote-number" class="col-md-2 col-form-label">No.</label>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="form-quote-number" name="number"
+                            placeholder="Enter number" maxlength="15" value="{{ quote.number }}" required>
+                        <small id="form-quote-number-help" class="form-text text-muted">No. of the quote</small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-deceased-name" class="col-md-2 col-form-label">Deceased Name</label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="form-quote-deceased-name" name="deceased_name"
+                            placeholder="Enter deceased name" maxlength="255" value="{{ quote.deceased_name }}" required>
+                        <small id="form-quote-deceased-name-help" class="form-text text-muted">Name of the deceased</small>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <div class="form-group mb-0 row">
+                    <div class="offset-md-2 col-md-3">
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock %}
