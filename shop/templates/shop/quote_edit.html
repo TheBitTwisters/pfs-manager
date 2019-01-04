@@ -22,15 +22,115 @@
                     <div class="col-md-3">
                         <input type="text" class="form-control" id="form-quote-number" name="number"
                             placeholder="Enter number" maxlength="15" value="{{ quote.number }}" required>
-                        <small id="form-quote-number-help" class="form-text text-muted">No. of the quote</small>
+                        <small id="form-quote-number-help" class="form-text text-muted"></small>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="form-quote-deceased-name" class="col-md-2 col-form-label">Deceased Name</label>
+                    <label for="form-quote-date" class="col-md-2 col-form-label">Date</label>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" id="form-quote-date" name="date"
+                            placeholder="Enter date" min="0" value="{{ quote.date|date:"Y-m-d" }}" required>
+                        <small id="form-quote-date-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="mb-4">
+                <h4 class="mb-3">Person/Company Information</h4>
+                <div class="form-group row">
+                    <label for="form-quote-person_name" class="col-md-2 col-form-label">Person/Company Name</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="form-quote-person_name" name="person_name"
+                            placeholder="Enter person/company name" maxlength="255" value="{{ quote.person_name }}" required>
+                        <small id="form-quote-person_name-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-person_phone" class="col-md-2 col-form-label">Phone</label>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="form-quote-person_phone" name="person_phone"
+                            placeholder="Enter phone" maxlength="15" value="{{ quote.person_phone }}" required>
+                        <small id="form-quote-person_phone-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-person_address" class="col-md-2 col-form-label">Address</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" id="form-quote-deceased-name" name="deceased_name"
+                        <textarea class="form-control" id="form-quote-person_address" name="person_address"
+                            rows="2" placeholder="Enter address">{{ quote.description }}</textarea>
+                        <small id="form-quote-person_address-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-person_deceased_relationship" class="col-md-2 col-form-label">Relationship to the deceased</label>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="form-quote-person_deceased_relationship" name="person_deceased_relationship"
+                            placeholder="Enter relationship" maxlength="15" value="{{ quote.person_deceased_relationship }}" required>
+                        <small id="form-quote-person_deceased_relationship-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="mb-4">
+                <h4 class="mb-3">Contact Information</h4>
+                <div class="form-group row">
+                    <label for="form-quote-contact_name" class="col-md-2 col-form-label">Contact Name</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="form-quote-contact_name" name="contact_name"
+                            placeholder="Enter contact name" maxlength="255" value="{{ quote.contact_name }}" required>
+                        <small id="form-quote-contact_name-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-contact_phone" class="col-md-2 col-form-label">Phone</label>
+                    <div class="col-md-3">
+                        <input type="text" class="form-control" id="form-quote-contact_phone" name="contact_phone"
+                            placeholder="Enter phone" maxlength="15" value="{{ quote.contact_phone }}" required>
+                        <small id="form-quote-contact_phone-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="mb-4">
+                <h4 class="mb-3">Deceased Information</h4>
+                <div class="form-group row">
+                    <label for="form-quote-deceased_name" class="col-md-2 col-form-label">Deceased Name</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="form-quote-deceased_name" name="deceased_name"
                             placeholder="Enter deceased name" maxlength="255" value="{{ quote.deceased_name }}" required>
-                        <small id="form-quote-deceased-name-help" class="form-text text-muted">Name of the deceased</small>
+                        <small id="form-quote-deceased_name-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-deceased_date_birth" class="col-md-2 col-form-label">Birth Date</label>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" id="form-quote-deceased_date_birth" name="deceased_date_birth"
+                            placeholder="Enter date" min="0" value="{{ quote.deceased_date_birth|date:"Y-m-d" }}" required>
+                        <small id="form-quote-deceased_date_birth-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-deceased_date_death" class="col-md-2 col-form-label">Death Date</label>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" id="form-quote-deceased_date_death" name="deceased_date_death"
+                            placeholder="Enter date" min="0" value="{{ quote.deceased_date_death|date:"Y-m-d" }}" required>
+                        <small id="form-quote-deceased_date_death-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="mb-4">
+                <h4 class="mb-3">Pickup/Delivery Information</h4>
+                <div class="form-group row">
+                    <label for="form-quote-delivery_datetime" class="col-md-2 col-form-label">Delivery datetime</label>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" id="form-quote-delivery_datetime" name="delivery_datetime"
+                            placeholder="Enter date" min="0" value="{{ quote.delivery_datetime|date:"Y-m-d" }}" required>
+                        <small id="form-quote-deceased_date_birth-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-deceased_date_death" class="col-md-2 col-form-label">Death Date</label>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" id="form-quote-deceased_date_death" name="deceased_date_death"
+                            placeholder="Enter date" min="0" value="{{ quote.deceased_date_death|date:"Y-m-d" }}" required>
+                        <small id="form-quote-deceased_date_death-help" class="form-text text-muted"></small>
                     </div>
                 </div>
             </fieldset>
