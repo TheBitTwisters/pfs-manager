@@ -56,7 +56,7 @@
                     <label for="form-quote-person_address" class="col-md-2 col-form-label">Address</label>
                     <div class="col-md-10">
                         <textarea class="form-control" id="form-quote-person_address" name="person_address"
-                            rows="2" placeholder="Enter address">{{ quote.description }}</textarea>
+                            rows="2" placeholder="Enter address">{{ quote.person_address }}</textarea>
                         <small id="form-quote-person_address-help" class="form-text text-muted"></small>
                     </div>
                 </div>
@@ -119,18 +119,34 @@
                 <h4 class="mb-3">Pickup/Delivery Information</h4>
                 <div class="form-group row">
                     <label for="form-quote-delivery_datetime" class="col-md-2 col-form-label">Delivery datetime</label>
-                    <div class="col-md-3">
-                        <input type="date" class="form-control" id="form-quote-delivery_datetime" name="delivery_datetime"
-                            placeholder="Enter date" min="0" value="{{ quote.delivery_datetime|date:"Y-m-d" }}" required>
-                        <small id="form-quote-deceased_date_birth-help" class="form-text text-muted"></small>
+                    <div class="col-md-4">
+                        <input type="datetime-local" class="form-control" id="form-quote-delivery_datetime" name="delivery_datetime"
+                            placeholder="Enter date" min="0" value="{{ quote.delivery_datetime|date:"Y-m-d\TH:m" }}" required>
+                        <small id="form-quote-delivery_datetime-help" class="form-text text-muted"></small>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="form-quote-deceased_date_death" class="col-md-2 col-form-label">Death Date</label>
-                    <div class="col-md-3">
-                        <input type="date" class="form-control" id="form-quote-deceased_date_death" name="deceased_date_death"
-                            placeholder="Enter date" min="0" value="{{ quote.deceased_date_death|date:"Y-m-d" }}" required>
-                        <small id="form-quote-deceased_date_death-help" class="form-text text-muted"></small>
+                    <label for="form-quote-delivery_notes" class="col-md-2 col-form-label">Delivery Notes</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" id="form-quote-delivery_notes" name="delivery_notes"
+                            rows="2" placeholder="Enter delivery notes">{{ quote.delivery_notes }}</textarea>
+                        <small id="form-quote-delivery_notes-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-pickup_datetime" class="col-md-2 col-form-label">Pickup datetime</label>
+                    <div class="col-md-4">
+                        <input type="datetime-local" class="form-control" id="form-quote-pickup_datetime" name="pickup_datetime"
+                            placeholder="Enter date" min="0" value="{{ quote.pickup_datetime|date:"Y-m-d\TH:m" }}" required>
+                        <small id="form-quote-pickup_datetime-help" class="form-text text-muted"></small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="form-quote-pickup_notes" class="col-md-2 col-form-label">Pickup Notes</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" id="form-quote-pickup_notes" name="pickup_notes"
+                            rows="2" placeholder="Enter pickup notes">{{ quote.pickup_notes }}</textarea>
+                        <small id="form-quote-pickup_notes-help" class="form-text text-muted"></small>
                     </div>
                 </div>
             </fieldset>

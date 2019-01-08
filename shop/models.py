@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.text import Truncator
 
 
-class Quote(models.Model):
+class Client(models.Model):
     number = models.CharField(max_length=15, blank=False, unique=True)
     person_name = models.CharField(max_length=128, blank=False)
     person_phone = models.CharField(max_length=30, blank=False)
@@ -53,5 +53,9 @@ class Quote(models.Model):
         if not self.number:
             return False
         if not self.person_name:
+            return False
+        if not self.contact_name:
+            return False
+        if not self.deceased_name:
             return False
         return True
