@@ -7,15 +7,15 @@
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'products:coffins' %}" class="btn btn-link mb-4">Back to Coffins list</a>
+<a href="{% url 'products:list' 'coffin' %}" class="btn btn-link mb-4">Back to Coffins list</a>
 <div class="card mb-4">
     <div class="card-header">
         Coffin Info
     </div>
     <div class="card-body">
-        <form class="" action="{% url 'products:coffin_save' %}" method="post">
+        <form class="" action="{% url 'products:save' 'coffin' %}" method="post">
             {% csrf_token %}
-            <input type="hidden" name="coffin_id" value="{{ coffin.id }}">
+            <input type="hidden" name="object_id" value="{{ coffin.id }}">
             <fieldset class="mb-4">
                 <div class="form-group row">
                     <label for="form-coffin-code" class="col-md-2 col-form-label">Code</label>
@@ -42,11 +42,11 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="form-coffin-colors" class="col-md-2 col-form-label">Colors</label>
+                    <label for="form-coffin-design" class="col-md-2 col-form-label">Design</label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" id="form-coffin-colors" name="colors"
-                            placeholder="Enter colors" maxlength="255" value="{{ coffin.colors }}" required>
-                        <small id="form-coffin-colors-help" class="form-text text-muted">Colors of the coffin</small>
+                        <input type="text" class="form-control" id="form-coffin-design" name="colors"
+                            placeholder="Enter design" maxlength="255" value="{{ coffin.design }}" required>
+                        <small id="form-coffin-design-help" class="form-text text-muted">Design of the coffin</small>
                     </div>
                 </div>
                 <div class="form-group row">

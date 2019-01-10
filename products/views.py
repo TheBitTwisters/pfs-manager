@@ -2,144 +2,91 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
 from django.utils import timezone
-from .models import Coffin, Service
+from .models import Product
 from logs.models import Log
 
 
 @login_required
-def coffins(request):
-    coffins = Coffin.objects.filter(deleted=False).order_by('-id')[:30]
-    data = { 'coffins': coffins }
-    return render(request, 'products/coffins.html', data)
+def list(request, category='coffin'):
+    products = Product.objects.filter(category=category, deleted=False).order_by('-id')[:30]
+    if category == 'service':
+        data = { 'services': products }
+        template = 'products/services.html'
+    else:
+        data = { 'coffins': products }
+        template = 'products/coffins.html'
+    return render(request, template, data)
 
 
 @login_required
-def coffin_edit(request,coffin_id=0):
-    coffin = None
+def edit(request, category, object_id=0):
+    product = None
     try:
-        coffin = Coffin.objects.get(id=coffin_id)
+        product = Product.objects.get(id=object_id)
     except ObjectDoesNotExist:
-        coffin = Coffin()
-        coffin.id = 0
-    data = { 'coffin': coffin }
-    return render(request, 'products/coffin_edit.html', data)
+        product = Product()
+        product.id = 0
+        product.category = category
+    if category == 'service':
+        data = { 'service': product }
+        template = 'products/service_edit.html'
+    else:
+        data = { 'coffin': product }
+        template = 'products/coffin_edit.html'
+    return render(request, template, data)
 
 
 @login_required
-def coffin_save(request):
-    coffin_id = request.POST.get('coffin_id', 0)
+def save(request, category):
+    object_id = request.POST.get('object_id', 0)
     next = request.POST.get('next', 'list')
     action = 'create'
     if request.method == 'POST':
-        coffin = Coffin()
+        product = Product()
         try:
-            if int(coffin_id) > 0:
-                coffin.id = coffin_id
+            if int(object_id) > 0:
+                product.id = object_id
                 action = 'update'
-                coffin.datetime_updated = timezone.now()
+                product.datetime_updated = timezone.now()
         except ValueError as e:
-            coffin.id = 0
-        coffin.form(request.POST)
-        coffin.user = request.user
-        if coffin.is_valid():
-            coffin.save()
-            Log.objects.create(
-                object = 'Coffin',
-                object_id = coffin.id,
-                action = action,
-                user = request.user
-            )
-            if next == 'add':
-                return redirect('products:coffin_edit', 0)
-            return redirect('products:coffins')
-    return redirect('products:coffin_edit', coffin_id)
+            product.id = 0
+        product.category = category
+        product.form(request.POST)
+        product.user = request.user
+        if product.is_valid():
+            try:
+                product.save()
+                Log.objects.create(
+                    object = 'Product:' + category,
+                    object_id = product.id,
+                    action = action,
+                    user = request.user
+                )
+                if next == 'add':
+                    return redirect('products:edit', category, 0)
+                return redirect('products:list', category)
+            except IntegrityError as e:
+                product = None
+    return redirect('products:edit', category, object_id)
 
 
 @login_required
-def coffin_delete(request):
-    coffin_id = request.POST.get('coffin_id', 0)
+def delete(request, category):
+    object_id = request.POST.get('object_id', 0)
     if request.method == 'POST':
         try:
-            coffin = Coffin.objects.get(id=coffin_id)
-            coffin.deleted = True
-            coffin.datetime_deleted = timezone.now()
-            coffin.save()
+            product = Product.objects.get(id=object_id)
+            product.deleted = True
+            product.datetime_deleted = timezone.now()
+            product.save()
             Log.objects.create(
-                object = 'Coffin',
-                object_id = coffin.id,
+                object = 'Product:' + category,
+                object_id = product.id,
                 action = 'delete',
                 user = request.user
             )
         except ObjectDoesNotExist:
-            coffin = None
-    return redirect('products:coffins')
-
-
-@login_required
-def services(request):
-    services = Service.objects.filter(deleted=False).order_by('-id')[:30]
-    data = { 'services': services }
-    return render(request, 'products/services.html', data)
-
-
-@login_required
-def service_edit(request,service_id=0):
-    service = None
-    try:
-        service = Service.objects.get(id=service_id)
-    except ObjectDoesNotExist:
-        service = Service()
-        service.id = 0
-    data = { 'service': service }
-    return render(request, 'products/service_edit.html', data)
-
-
-@login_required
-def service_save(request):
-    service_id = request.POST.get('service_id', 0)
-    next = request.POST.get('next', 'list')
-    action = 'create'
-    if request.method == 'POST':
-        service = Service()
-        try:
-            if int(service_id) > 0:
-                service.id = service_id
-                action = 'update'
-                service.datetime_updated = timezone.now()
-        except ValueError as e:
-            service.id = 0
-        service.form(request.POST)
-        service.user = request.user
-        if service.is_valid():
-            service.save()
-            Log.objects.create(
-                object = 'Service',
-                object_id = service.id,
-                action = action,
-                user = request.user
-            )
-            if next == 'add':
-                return redirect('products:service_edit', 0)
-            return redirect('products:services')
-    return redirect('products:service_edit', service_id)
-
-
-@login_required
-def service_delete(request):
-    service_id = request.POST.get('service_id', 0)
-    if request.method == 'POST':
-        try:
-            service = Service.objects.get(id=service_id)
-            service.deleted = True
-            service.datetime_deleted = timezone.now()
-            service.save()
-            Log.objects.create(
-                object = 'Service',
-                object_id = service.id,
-                action = 'delete',
-                user = request.user
-            )
-        except ObjectDoesNotExist:
-            service = None
-    return redirect('products:services')
+            product = None
+    return redirect('products:list', category)

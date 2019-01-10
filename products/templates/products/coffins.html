@@ -39,8 +39,8 @@
                             <dd class="col-sm-9">{{ coffin.short_description }}</dd>
                         </dl>
                         <dl class="row mb-0">
-                            <dt class="col-sm-3 col-lg-2">Colors</dt>
-                            <dd class="col-sm-9">{{ coffin.colors }}</dd>
+                            <dt class="col-sm-3 col-lg-2">Design</dt>
+                            <dd class="col-sm-9">{{ coffin.design }}</dd>
                         </dl>
                         <dl class="d-md-none row mb-0">
                             <dt class="col-sm-3 col-lg-2">Price</dt>
@@ -54,7 +54,7 @@
                 </td>
                 <td class="d-none d-md-table-cell text-right">PGK {{ coffin.print_price }}</td>
                 <td>
-                    <a class="text-info" href="{% url 'products:coffin_edit' coffin.id %}">Edit</a>
+                    <a class="text-info" href="{% url 'products:edit' 'coffin' coffin.id %}">Edit</a>
                     &nbsp;
                     <a class="text-danger" href="javascript:prompt_delete({{coffin.id}})">Delete</a>
                 </td>
@@ -69,9 +69,9 @@
     <div id="modal-coffin-delete" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <form action="{% url 'products:coffin_delete' %}" method="post">
+                <form action="{% url 'products:delete' 'coffin' %}" method="post">
                     {% csrf_token %}
-                    <input id="modal-coffin-delete-id" type="hidden" name="coffin_id" value="0">
+                    <input id="modal-coffin-delete-id" type="hidden" name="object_id" value="0">
                     <div class="modal-body">
                         Are you sure you want to delete this record?
                     </div>

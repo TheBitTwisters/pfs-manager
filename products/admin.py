@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Coffin
+from .models import Product
 
 
-admin.site.register(Coffin)
+admin.site.register(Product)

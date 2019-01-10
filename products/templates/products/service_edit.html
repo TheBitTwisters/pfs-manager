@@ -7,15 +7,15 @@
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'products:services' %}" class="btn btn-link mb-4">Back to Services list</a>
+<a href="{% url 'products:list' 'service' %}" class="btn btn-link mb-4">Back to Services list</a>
 <div class="card mb-4">
     <div class="card-header">
         Service Info
     </div>
     <div class="card-body">
-        <form class="" action="{% url 'products:service_save' %}" method="post">
+        <form class="" action="{% url 'products:save' 'service' %}" method="post">
             {% csrf_token %}
-            <input type="hidden" name="service_id" value="{{ service.id }}">
+            <input type="hidden" name="object_id" value="{{ service.id }}">
             <fieldset class="mb-4">
                 <div class="form-group row">
                     <label for="form-service-code" class="col-md-2 col-form-label">Code</label>
