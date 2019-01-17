@@ -80,10 +80,15 @@ WSGI_APPLICATION = 'pfsmanager.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': os.path.join(BASE_DIR, 'my.cnf'),
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'pfsmanager',
+        'HOST': '10.130.115.122',
+        'PORT': 3306,
+        'USER': 'pfs',
+        'PASSWORD': 'CExRFjDwzsf3thW8AQ9uBavUP2MgLGYd',
+        # 'default-character-set' = 'utf8mb4',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
