@@ -2,10 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import Truncator
+from products.models import Product
 
 
 class Client(models.Model):
-    number = models.CharField(max_length=15, blank=False, unique=True)
+    date = models.DateField(default=timezone.localdate)
     person_name = models.CharField(max_length=128, blank=False)
     person_phone = models.CharField(max_length=30, blank=False)
     person_address = models.TextField(blank=True)
@@ -15,9 +16,6 @@ class Client(models.Model):
     deceased_name = models.CharField(max_length=128, blank=False)
     deceased_date_birth = models.DateField(default=timezone.localdate)
     deceased_date_death = models.DateField(default=timezone.localdate)
-    document_type = models.CharField(max_length=15, blank=False)
-    document_file = models.FileField(upload_to='documents', default='', blank=True)
-    date = models.DateField(default=timezone.localdate)
     delivery_datetime = models.DateTimeField(default=timezone.now)
     delivery_notes = models.TextField(blank=True)
     pickup_datetime = models.DateTimeField(default=timezone.now)
@@ -59,3 +57,21 @@ class Client(models.Model):
         if not self.deceased_name:
             return False
         return True
+
+
+class ClientFile(models.Model):
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    type = models.CharField(max_length=15, blank=False)
+    file = models.FileField(upload_to='documents', default='', blank=True)
+
+
+class Quote(models.Model):
+    number = models.CharField(max_length=15, blank=False, unique=True)
+    terms = models.CharField(max_length=30, default='')
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+
+
+class QuoteProducts(models.Model):
+    quote = models.ForeignKey(Quote, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
