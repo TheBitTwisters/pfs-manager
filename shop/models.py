@@ -5,8 +5,28 @@ from django.utils.text import Truncator
 from products.models import Product
 
 
-class Client(models.Model):
+class Quote(models.Model):
+    number = models.CharField(max_length=15, blank=False, unique=True)
     date = models.DateField(default=timezone.localdate)
+    terms = models.CharField(max_length=30, default='')
+    deleted = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    datetime_created = models.DateTimeField(default=timezone.now)
+    datetime_updated = models.DateTimeField(null=True, blank=True)
+    datetime_deleted = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return 'Quote # %s' % self.number
+
+
+class QuoteProducts(models.Model):
+    quote = models.ForeignKey(Quote, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+
+
+class Client(models.Model):
+    quote = models.ForeignKey(Quote, on_delete=models.CASCADE)
     person_name = models.CharField(max_length=128, blank=False)
     person_phone = models.CharField(max_length=30, blank=False)
     person_address = models.TextField(blank=True)
@@ -27,10 +47,9 @@ class Client(models.Model):
     datetime_deleted = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return '[' + self.number + '] ' + self.deceased_name
+        return '%s: %s' % (self.quote, self.person_name)
 
     def form(self, form):
-        self.number = form.get('number', '0')
         self.person_name = form.get('person_name', '')
         self.person_phone = form.get('person_phone', '')
         self.person_address = form.get('person_address', '')
@@ -40,16 +59,12 @@ class Client(models.Model):
         self.deceased_name = form.get('deceased_name', '')
         self.deceased_date_birth = form.get('deceased_date_birth', timezone.localdate)
         self.deceased_date_death = form.get('deceased_date_death', timezone.localdate)
-        self.document_type = form.get('document_type', '')
-        self.date = form.get('date', timezone.localdate)
         self.delivery_datetime = form.get('delivery_datetime', timezone.now)
         self.delivery_notes = form.get('delivery_notes', '')
         self.pickup_datetime = form.get('pickup_datetime', timezone.now)
         self.pickup_notes = form.get('pickup_notes', '')
 
     def is_valid(self):
-        if not self.number:
-            return False
         if not self.person_name:
             return False
         if not self.contact_name:
@@ -63,15 +78,3 @@ class ClientFile(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     type = models.CharField(max_length=15, blank=False)
     file = models.FileField(upload_to='documents', default='', blank=True)
-
-
-class Quote(models.Model):
-    number = models.CharField(max_length=15, blank=False, unique=True)
-    terms = models.CharField(max_length=30, default='')
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-
-
-class QuoteProducts(models.Model):
-    quote = models.ForeignKey(Quote, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=0)
