@@ -86,9 +86,11 @@
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript">
     function prompt_delete(id)
     {
         $('#modal-coffin-delete-id').val(id);
         $('#modal-coffin-delete').modal('show');
     }
+</script>
 {% endblock %}

@@ -74,9 +74,11 @@
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript">
     function prompt_delete(id)
     {
         $('#modal-quote-delete-id').val(id);
         $('#modal-quote-delete').modal('show');
     }
+</script>
 {% endblock %}

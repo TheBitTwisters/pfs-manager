@@ -9,6 +9,25 @@ from logs.models import Log
 
 
 @login_required
+def json(request, category='coffin'):
+    products = Product.objects.filter(deleted=False).order_by('-id')
+    json_products = {}
+    for product in products:
+        json_products[product.id] = {
+            'id': product.id,
+            'category': product.category,
+            'code': product.code,
+            'name': product.name,
+            'description': product.description,
+            'design': product.design,
+            'price': product.price
+        }
+    return JsonResponse({
+        'products': json_products
+    })
+
+
+@login_required
 def list(request, category='coffin'):
     products = Product.objects.filter(category=category, deleted=False).order_by('-id')[:30]
     if category == 'service':
