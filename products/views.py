@@ -10,7 +10,12 @@ from logs.models import Log
 
 @login_required
 def json(request, category='coffin'):
-    products = Product.objects.filter(deleted=False).order_by('-id')
+    param_name = request.GET.get('name', '')
+    param_category = request.GET.get('category', '')
+    param_limit = int(request.GET.get('limit', 10))
+    param_page = int(request.GET.get('page', 1))
+    param_offset = param_limit * (param_page - 1)
+    products = Product.objects.filter(deleted=False, name__icontains=param_name, category__contains=param_category).order_by('-id')[param_offset:param_limit]
     json_products = {}
     for product in products:
         json_products[product.id] = {
