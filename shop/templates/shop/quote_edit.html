@@ -13,27 +13,46 @@
 
 {% block content %}
 <a href="{% url 'shop:quotes' %}" class="btn btn-link mb-4">Back to Quotations list</a>
-<div class="card mb-4">
+<div class="input-group mb-4">
+    <select id="form-product-search" class="custom-select"></select>
+</div>
+<div class="card">
     <div class="card-header">
-        Quotation Info
+        Cart
     </div>
-    <div class="card-body">
-        <div class="form-group row">
-            <div class="col-md-4">
-                <select id="form-product-search" class="form-control"
-                    data-placeholder="Search products" style="width: 100%">
-                </select>
-            </div>
-        </div>
-    </div>
+    <table id="cart-table" class="table table-bordered mb-0">
+        <thead>
+            <th class="table-col-no">#</th>
+            <th>Product</th>
+            <th class="table-col-price">Unit Price</th>
+            <th class="table-col-quantity">Quantity</th>
+            <th class="table-col-price">Price</th>
+        </thead>
+        <tbody>
+            <tr id="cart-row" class="d-none">
+                <td class="cart-row-no">0</td>
+                <td class="cart-row-name">Name</td>
+                <td class="cart-row-unit_price">0.00</td>
+                <td class="cart-row-quantity">
+                    <input class="form-control" type="number" value="1">
+                </td>
+                <td class="cart-row-price">0.00</td>
+            </tr>
+            <tr id="cart-row-total">
+                <td class="cart-row-no">#</td>
+                <td class="cart-row-name" colspan="3">Total</td>
+                <td class="cart-row-price">0.00</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script src="{% static 'plugins/select2/js/select2.min.js' %}"></script>
 <script type="text/javascript">
-    var products = [];
-    var cart = [];
+    var products = {};
+    var cart = {};
 
     $(function() {
 
@@ -68,23 +87,59 @@
                     };
                 }
             },
-            minimumInputLength: 1
+            minimumInputLength: 1,
+            placeholder: 'Search products'
         });
 
         $('#form-product-search').on('change', function() {
             id = $(this).val();
-            quantity = 0;
-            if (id > 0) {
-                if (cart[id]) quantity = cart[id].quantity;
-                cart[id] = {'id': id, 'quantity': quantity+1 }
-            }
+            if (id > 0) addToCart(id);
             else return;
-            $.each(cart, function(key, item) {
-                console.log(item);
-            });
             $('#form-product-search').val(null).trigger('change');
         });
 
     });
+
+    function addToCart(product_id)
+    {
+        if (cart[product_id]) return;
+        cart[product_id] = { 'id': product_id, 'quantity': 1 };
+
+        row_no = Object.keys(cart).length
+        row_name = '[' + products[product_id].code + '] ' + products[product_id].name;
+        row_price = products[product_id].price;
+        row_quantity = 1;
+
+        table_row = $('#cart-row').clone(true);
+        table_row.find('.cart-row-no').html(row_no);
+        table_row.find('.cart-row-name').html(row_name);
+        table_row.find('.cart-row-unit_price').html(printMoney(row_price));
+        table_row.find('.cart-row-quantity input').val(row_quantity);
+        table_row.find('.cart-row-price').html(printMoney(row_price));
+
+        table_row.toggleClass('d-none');
+        table_row.insertBefore('#cart-row-total');
+
+        calculateTotal();
+    }
+
+    function calculateTotal()
+    {
+        total_price = 0.00;
+        $.each(cart, function(key, value) {
+            total_price += products[value.id].price * value.quantity;
+        });
+
+        $('#cart-row-total .cart-row-price').html(printMoney(total_price));
+    }
+
+    function printMoney(money)
+    {
+        return money.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
 </script>
 {% endblock %}
