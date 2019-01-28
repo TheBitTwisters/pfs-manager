@@ -29,7 +29,7 @@
             <th class="table-col-price">Price</th>
         </thead>
         <tbody>
-            <tr id="cart-row" class="d-none">
+            <tr id="cart-row" class="d-none" data-product_id="0">
                 <td class="cart-row-no">0</td>
                 <td class="cart-row-name">Name</td>
                 <td class="cart-row-unit_price">0.00</td>
@@ -39,8 +39,7 @@
                 <td class="cart-row-price">0.00</td>
             </tr>
             <tr id="cart-row-total">
-                <td class="cart-row-no">#</td>
-                <td class="cart-row-name" colspan="3">Total</td>
+                <th class="cart-row-name text-right" colspan="4">Total</th>
                 <td class="cart-row-price">0.00</td>
             </tr>
         </tbody>
@@ -98,6 +97,16 @@
             $('#form-product-search').val(null).trigger('change');
         });
 
+        $('.cart-row-quantity input').on('change', function() {
+            parent_row = $(this).parents('tr');
+            product_id = parent_row.data('product_id');
+            cart[product_id].quantity = $(this).val();
+            row_price = products[product_id].price * cart[product_id].quantity;
+            parent_row.find('.cart-row-price').html(printMoney(row_price));
+
+            calculateTotal();
+        });
+
     });
 
     function addToCart(product_id)
@@ -111,6 +120,7 @@
         row_quantity = 1;
 
         table_row = $('#cart-row').clone(true);
+        table_row.data('product_id', product_id);
         table_row.find('.cart-row-no').html(row_no);
         table_row.find('.cart-row-name').html(row_name);
         table_row.find('.cart-row-unit_price').html(printMoney(row_price));
