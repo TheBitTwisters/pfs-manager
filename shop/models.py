@@ -8,7 +8,10 @@ from products.models import Product
 class Quote(models.Model):
     number = models.CharField(max_length=15, blank=False, unique=True)
     date = models.DateField(default=timezone.localdate)
-    terms = models.CharField(max_length=30, default='')
+    payment_mode = models.CharField(max_length=30, default='')
+    payment_terms = models.CharField(max_length=30, default='')
+    discount = models.DecimalField(max_digits=8, decimal_places=2)
+    gst = models.IntegerField(default=0)
     deleted = models.BooleanField(default=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     datetime_created = models.DateTimeField(default=timezone.now)
