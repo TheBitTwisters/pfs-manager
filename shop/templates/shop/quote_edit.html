@@ -5,6 +5,12 @@
 {% load static %}
 {% block styles %}
 <link rel="stylesheet" href="{% static 'plugins/select2/css/select2.min.css' %}" />
+<style media="screen">
+    #cart-row td *
+    {
+        visibility: hidden;
+    }
+</style>
 {% endblock %}
 
 {% block navbar %}
@@ -13,42 +19,97 @@
 
 {% block content %}
 <a href="{% url 'shop:quotes' %}" class="btn btn-link mb-4">Back to Quotations list</a>
-<div class="input-group mb-4">
-    <select id="form-product-search" class="custom-select"></select>
+<div class="row">
+    <div class="col-md-4 col-lg-3">
+        <div class="input-group input-group-lg mb-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Quote #</span>
+            </div>
+            <input type="number" class="form-control text-right" value="0" min="0" max="100000">
+        </div>
+    </div>
 </div>
-<div class="card">
+<div class="card mb-4">
     <div class="card-header">
-        Cart
+        <div class="row align-items-center">
+            <div class="col-md-6 col-lg-8">
+                <h4 class="mb-0">Cart</h4>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <select id="form-product-search" class="custom-select"></select>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table id="cart-table" class="table table-bordered table-hover table-sm mb-0">
+            <thead>
+                <th class="table-col-no text-center">#</th>
+                <th class="text-center">Product</th>
                 <td class="table-col-remove text-center">Remove</td>
+                <th class="table-col-price text-center">Unit Price</th>
+                <th class="table-col-quantity text-center">Quantity</th>
+                <th class="table-col-price text-center">Price</th>
+            </thead>
+            <tbody>
+                <tr id="cart-row" data-product_id="0">
+                    <td class="cart-row-no">
+                        <span>0</span>
+                    </td>
+                    <td class="cart-row-name">
+                        <span></span>
+                    </td>
                     <td class="cart-row-remove text-center">
                         <a class="text-danger" href="#">
                             <i class="fas fa-trash-alt"></i>
                         </a>
+                    </td>
+                    <td class="cart-row-unit_price text-right">
+                        <span>0.00</span>
+                    </td>
+                    <td class="cart-row-quantity">
+                        <input class="form-control form-control-sm" type="number" value="1" min="1">
+                    </td>
+                    <td class="cart-row-price text-right">
+                        <span>0.00</span>
+                    </td>
+                </tr>
+                <tr id="cart-row-sub_total" class="table-warning">
+                    <td colspan="3"></td>
+                    <th class="cart-row-name text-right" colspan="2">Sub Total</th>
+                    <th class="cart-row-price text-right">0.00</th>
+                </tr>
+                <tr id="cart-row-gst">
+                    <td colspan="3"></td>
+                    <th class="cart-row-name text-right" colspan="2">
+                        <div class="input-group input-group-sm">
+                            <input type="number" class="form-control form-control-sm text-right" placeholder="GST" value="10" min="0" max="100">
+                            <div class="input-group-append">
+                                <span class="input-group-text">% GST</span>
+                            </div>
+                        </div>
+                    </th>
+                    <td class="cart-row-price text-right">0.00</td>
+                </tr>
+                <tr id="cart-row-total">
+                    <td colspan="3"></td>
+                    <th class="cart-row-name text-right" colspan="2">Total</th>
+                    <td class="cart-row-price text-right">0.00</td>
+                </tr>
+                <tr id="cart-row-discount">
+                    <td colspan="3"></td>
+                    <th class="cart-row-name text-right" colspan="2">Discount</th>
+                    <td class="cart-row-price">
+                        <input class="form-control form-control-sm text-right" type="number" value="0.00" min="0">
+                    </td>
+                </tr>
+                <tr id="cart-row-net_total" class="table-success">
+                    <td colspan="3"></td>
+                    <th class="cart-row-name text-right" colspan="2">Net Total</th>
+                    <th class="cart-row-price text-right">0.00</th>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <table id="cart-table" class="table table-bordered mb-0">
-        <thead>
-            <th class="table-col-no">#</th>
-            <th>Product</th>
-            <th class="table-col-price">Unit Price</th>
-            <th class="table-col-quantity">Quantity</th>
-            <th class="table-col-price">Price</th>
-        </thead>
-        <tbody>
-            <tr id="cart-row" class="d-none" data-product_id="0">
-                <td class="cart-row-no">0</td>
-                <td class="cart-row-name">Name</td>
-                <td class="cart-row-unit_price">0.00</td>
-                <td class="cart-row-quantity">
-                    <input class="form-control" type="number" value="1">
-                </td>
-                <td class="cart-row-price">0.00</td>
-            </tr>
-            <tr id="cart-row-total">
-                <th class="cart-row-name text-right" colspan="4">Total</th>
-                <td class="cart-row-price">0.00</td>
-            </tr>
-        </tbody>
-    </table>
 </div>
 {% endblock %}
 
@@ -78,8 +139,7 @@
                     params.page = params.page || 1;
                     return {
                         results: $.map(data.products, function (product) {
-                            if (product)
-                                products[product.id] = product;
+                            products[product.id] = product;
                             return {
                                 id: product.id,
                                 text: '[' + product.code + '] ' + product.name
@@ -109,7 +169,22 @@
             row_price = products[product_id].price * cart[product_id].quantity;
             parent_row.find('.cart-row-price').html(printMoney(row_price));
 
-            calculateTotal();
+            calculate();
+        });
+
+        $('.cart-row-remove a').on('click', function() {
+            parent_row = $(this).parents('tr');
+            product_id = parent_row.data('product_id');
+            removeFromCart(product_id);
+            parent_row.remove();
+        });
+
+        $('#cart-row-gst input').on('change', function() {
+            calculate();
+        });
+
+        $('#cart-row-discount input').on('change', function() {
+            calculate();
         });
 
     });
@@ -125,6 +200,7 @@
         row_quantity = 1;
 
         table_row = $('#cart-row').clone(true);
+        table_row.removeAttr('id');
         table_row.data('product_id', product_id);
         table_row.find('.cart-row-no').html(row_no);
         table_row.find('.cart-row-name').html(row_name);
@@ -132,24 +208,42 @@
         table_row.find('.cart-row-quantity input').val(row_quantity);
         table_row.find('.cart-row-price').html(printMoney(row_price));
 
-        table_row.toggleClass('d-none');
-        table_row.insertBefore('#cart-row-total');
+        table_row.insertBefore('#cart-row');
 
-        calculateTotal();
+        calculate();
     }
 
-    function calculateTotal()
+    function removeFromCart(product_id)
     {
-        total_price = 0.00;
-        $.each(cart, function(key, value) {
-            total_price += products[value.id].price * value.quantity;
-        });
+        if (!cart[product_id]) return;
 
-        $('#cart-row-total .cart-row-price').html(printMoney(total_price));
+        delete cart[product_id];
+        calculate();
+    }
+
+    function calculate()
+    {
+        sub_total = 0.00;
+        $.each(cart, function(key, value) {
+            sub_total += products[value.id].price * value.quantity;
+        });
+        $('#cart-row-sub_total .cart-row-price').html(printMoney(sub_total));
+
+        gst = $('#cart-row-gst input').val();
+        gst_price = gst/100 * sub_total;
+        $('#cart-row-gst .cart-row-price').html(printMoney(gst_price));
+
+        total = sub_total + gst_price;
+        $('#cart-row-total .cart-row-price').html(printMoney(total));
+
+        discount = $('#cart-row-discount input').val();
+        net_total = Math.max(0, total - discount);
+        $('#cart-row-net_total .cart-row-price').html(printMoney(net_total));
     }
 
     function printMoney(money)
     {
+        money = money * 1;
         return money.toLocaleString(undefined, {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
