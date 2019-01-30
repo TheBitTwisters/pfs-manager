@@ -21,11 +21,19 @@
 <a href="{% url 'shop:quotes' %}" class="btn btn-link mb-4">Back to Quotations list</a>
 <div class="row">
     <div class="col-md-4 col-lg-3">
-        <div class="input-group input-group-lg mb-4">
+        <div class="input-group input-group-lg">
             <div class="input-group-prepend">
                 <span class="input-group-text">Quote #</span>
             </div>
-            <input type="number" class="form-control text-right" value="0" min="0" max="100000">
+            <input type="number" class="form-control" value="0" min="0" max="100000">
+        </div>
+    </div>
+    <div class="col-md-4 offset-md-4 offset-lg-5">
+        <div class="input-group input-group-lg mb-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Date</span>
+            </div>
+            <input type="date" class="form-control">
         </div>
     </div>
 </div>
@@ -41,7 +49,7 @@
         </div>
     </div>
     <div class="table-responsive">
-        <table id="cart-table" class="table table-bordered table-hover table-sm mb-0">
+        <table id="cart-table" class="table table-bordered table-hover mb-0">
             <thead>
                 <th class="table-col-no text-center">#</th>
                 <th class="text-center">Product</th>
