@@ -21,6 +21,21 @@ class Quote(models.Model):
     def __str__(self):
         return 'Quote # %s' % self.number
 
+    def form(self, form):
+        self.number = form.get('number', '')
+        self.date = form.get('date', timezone.localdate())
+        self.payment_mode = form.get('payment_mode', '')
+        self.payment_terms = form.get('payment_terms', '')
+        self.discount = form.get('discount', 0)
+        self.gst = form.get('gst', 0)
+
+    def is_valid(self):
+        if not self.number:
+            return False
+        if not self.date:
+            return False
+        return True
+
 
 class QuoteProducts(models.Model):
     quote = models.ForeignKey(Quote, on_delete=models.CASCADE)
