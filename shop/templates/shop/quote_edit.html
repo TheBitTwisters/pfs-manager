@@ -25,7 +25,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">Quote #</span>
             </div>
-            <input type="number" class="form-control" value="0" min="0" max="100000">
+            <input id="form-quote-number" type="number" class="form-control" value="0" min="0" max="100000">
         </div>
     </div>
     <div class="col-md-4 offset-md-4 offset-lg-5">
@@ -33,7 +33,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">Date</span>
             </div>
-            <input type="date" class="form-control">
+            <input id="form-quote-date" type="date" class="form-control">
         </div>
     </div>
 </div>
@@ -90,7 +90,8 @@
                     <td colspan="3"></td>
                     <th class="cart-row-name text-right" colspan="2">
                         <div class="input-group input-group-sm">
-                            <input type="number" class="form-control form-control-sm text-right" placeholder="GST" value="10" min="0" max="100">
+                            <input id="form-quote-gst" type="number" class="form-control form-control-sm text-right"
+                                placeholder="GST" value="10" min="0" max="100">
                             <div class="input-group-append">
                                 <span class="input-group-text">% GST</span>
                             </div>
@@ -107,7 +108,7 @@
                     <td colspan="3"></td>
                     <th class="cart-row-name text-right" colspan="2">Discount</th>
                     <td class="cart-row-price">
-                        <input class="form-control form-control-sm text-right" type="number" value="0.00" min="0">
+                        <input id="form-quote-discount" class="form-control form-control-sm text-right" type="number" value="0.00" min="0">
                     </td>
                 </tr>
                 <tr id="cart-row-net_total" class="table-success">
@@ -119,13 +120,47 @@
         </table>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-4 col-lg-3">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Payment mode</span>
+            </div>
+            <input id="form-quote-payment_mode" type="text" class="form-control" value="">
+        </div>
+    </div>
+    <div class="col-md-4 offset-md-4 offset-lg-5">
+        <div class="input-group mb-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Payment terms</span>
+            </div>
+            <input id="form-quote-payment_terms" type="text" class="form-control" value="">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <button id="form-btn-save" class="btn btn-success btn-lg" type="button">Save</button>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
+{% csrf_token %}
 <script src="{% static 'plugins/select2/js/select2.min.js' %}"></script>
 <script type="text/javascript">
     var products = {};
     var cart = {};
+
+    var quote = {
+            id: 0,
+            number: '',
+            date: '',
+            payment_mode: '',
+            payment_terms: '',
+            discount: 0,
+            gst: 0
+    };
 
     $(function() {
 
@@ -195,6 +230,12 @@
             calculate();
         });
 
+        $('#form-quote-number').on('change', function() {
+            quote.number = $(this).val();
+        });
+
+        $('#form-btn-save').on('click', save);
+
     });
 
     function addToCart(product_id)
@@ -256,6 +297,38 @@
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
+    }
+
+    function save()
+    {
+        if (quote.number) {
+            quote.number = $('#form-quote-number').val();
+            quote.date = $('#form-quote-date').val();
+            quote.payment_mode = $('#form-quote-payment_mode').val();
+            quote.payment_terms = $('#form-quote-payment_terms').val();
+            quote.discount = $('#form-quote-discount').val();
+            quote.gst = $('#form-quote-gst').val();
+
+            $.ajax({
+                url: '{% url 'shop:quote_save' %}',
+                dataType: 'json',
+                type: 'post',
+                data: $.param({
+                    quote_id: quote.id,
+                    number: quote.number,
+                    date: quote.date,
+                    payment_mode: quote.payment_mode,
+                    payment_terms: quote.payment_terms,
+                    discount: quote.discount,
+                    gst: quote.gst,
+                    csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+                }),
+                success: function(data) {
+                    console.log(data);
+                }
+            });
+        }
+        return false;
     }
 
 </script>

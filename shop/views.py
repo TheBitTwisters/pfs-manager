@@ -41,16 +41,28 @@ def quote_save(request):
             quote.id = 0
         quote.form(request.POST)
         quote.user = request.user
-        if quote.is_valid():
-            quote.save()
-            Log.objects.create(
-                object = 'Quote',
-                object_id = quote.id,
-                action = action,
-                user = request.user
-            )
-            return redirect('shop:quotes')
-    return redirect('shop:quote_edit', quote_id)
+        # if quote.is_valid():
+        #     try:
+        #         quote.save()
+        #         Log.objects.create(
+        #             object = 'Quote:',
+        #             object_id = quote.id,
+        #             action = action,
+        #             user = request.user
+        #         )
+        #     except IntegrityError as e:
+        #         quote = None
+    return JsonResponse({
+        'quote': {
+            'id': quote_id,
+            'number': quote.number,
+            'date': quote.date,
+            'payment_mode': quote.payment_mode,
+            'payment_terms': quote.payment_terms,
+            'discount': quote.discount,
+            'gst': quote.gst
+        }
+    })
 
 
 @login_required
