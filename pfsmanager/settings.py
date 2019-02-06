@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import configparser
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -78,15 +79,18 @@ WSGI_APPLICATION = 'pfsmanager.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+db_config = configparser.ConfigParser()
+db_config.read(os.path.join(BASE_DIR, 'my.cnf'))
+
 DATABASES = {
     'default': {
         'ENGINE': 'mysql.connector.django',
-        'NAME': 'pfsmanager',
-        'HOST': '10.130.115.122',
-        'PORT': 3306,
-        'USER': 'django',
-        'PASSWORD': 'Hwa35J8WqYNFdC7cVMrSvBEksLnfjuAy',
-        # 'default-character-set' = 'utf8mb4',
+        'NAME': db_config['mysql_client']['database'],
+        'HOST': db_config['mysql_client']['host'],
+        'PORT': db_config['mysql_client']['port'],
+        'USER': db_config['mysql_client']['user'],
+        'PASSWORD': db_config['mysql_client']['password'],
+        # 'default-character-set' = db_config.get('default-character-set'),
         # 'ENGINE': 'django.db.backends.sqlite3',
         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
@@ -130,7 +134,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 LOGIN_URL = '/admin/login/'
 LOGIN_REDIRECT_URL = '/home/'
