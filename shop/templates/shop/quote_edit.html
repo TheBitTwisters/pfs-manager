@@ -308,20 +308,28 @@
             quote.payment_terms = $('#form-quote-payment_terms').val();
             quote.discount = $('#form-quote-discount').val();
             quote.gst = $('#form-quote-gst').val();
+            quote.products = [];
+
+            $.each(cart, function(key, value) {
+                quote.products.push(value);
+            });
+
+            console.log(quote.products);
 
             $.ajax({
                 url: '{% url 'shop:quote_save' %}',
                 dataType: 'json',
                 type: 'post',
                 data: $.param({
-                    quote_id: quote.id,
-                    number: quote.number,
-                    date: quote.date,
-                    payment_mode: quote.payment_mode,
-                    payment_terms: quote.payment_terms,
-                    discount: quote.discount,
-                    gst: quote.gst,
-                    csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+                    'quote_id': quote.id,
+                    'number': quote.number,
+                    'date': quote.date,
+                    'payment_mode': quote.payment_mode,
+                    'payment_terms': quote.payment_terms,
+                    'discount': quote.discount,
+                    'gst': quote.gst,
+                    'products': $.param(cart),
+                    'csrfmiddlewaretoken': $('[name=csrfmiddlewaretoken]').val()
                 }),
                 success: function(data) {
                     console.log(data);

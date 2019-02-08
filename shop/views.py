@@ -60,7 +60,9 @@ def quote_save(request):
             'payment_mode': quote.payment_mode,
             'payment_terms': quote.payment_terms,
             'discount': quote.discount,
-            'gst': quote.gst
+            'gst': quote.gst,
+            'products': request.POST.get('products', '')
+
         }
     })
 
